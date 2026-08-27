@@ -118,13 +118,21 @@ export function MyInvestmentsPage() {
     queryKey: ['holdings'],
     queryFn: getHoldings,
   })
+  const [refreshMessage, setRefreshMessage] = useState<string | null>(null)
 
   const refresh = useMutation({
     mutationFn: refreshPrices,
-    onSuccess: () => {
+    onSuccess: (result) => {
       queryClient.invalidateQueries({ queryKey: ['holdings'] })
       queryClient.invalidateQueries({ queryKey: ['portfolio'] })
+      setRefreshMessage(
+        result.failed > 0
+          ? `Updated ${result.updated}, but ${result.failed} couldn't be priced right now.`
+          : `Updated ${result.updated} price(s).`,
+      )
     },
+    onError: (err) =>
+      setRefreshMessage(err instanceof ApiError ? err.message : "Couldn't refresh prices"),
   })
 
   if (isLoading) return <Spinner />
@@ -155,6 +163,11 @@ export function MyInvestmentsPage() {
 
   return (
     <Page title="My investments">
+      {refreshMessage && (
+        <div className="mb-4 rounded-lg bg-slate-100 px-3 py-2 text-sm text-slate-600">
+          {refreshMessage}
+        </div>
+      )}
       <div className="mb-4 flex items-center justify-between">
         <Link to="/setup/holdings" className="text-sm text-brand-600 underline">
           + Add investment
