@@ -4,8 +4,8 @@ import { Link } from 'react-router-dom'
 import { getCategories } from '../api/categories'
 import { moveHoldingCategory, removeHolding, updateHoldingUnits } from '../api/holdings'
 import { getHoldings, refreshPrices } from '../api/portfolio'
-import type { HoldingResponse } from '../api/types'
-import { Button, Card, Page, Spinner, TextInput, formatDate, formatInr } from '../components/ui'
+import { ApiError, type HoldingResponse } from '../api/types'
+import { Button, Card, ErrorBanner, Page, Spinner, TextInput, formatDate, formatInr } from '../components/ui'
 
 function HoldingRow({ holding }: { holding: HoldingResponse }) {
   const queryClient = useQueryClient()
@@ -97,7 +97,10 @@ function HoldingRow({ holding }: { holding: HoldingResponse }) {
 /** Screen 8 — My Investments. Holdings grouped by category. */
 export function MyInvestmentsPage() {
   const queryClient = useQueryClient()
-  const { data: holdings, isLoading } = useQuery({ queryKey: ['holdings'], queryFn: getHoldings })
+  const { data: holdings, isLoading, isError, error, refetch } = useQuery({
+    queryKey: ['holdings'],
+    queryFn: getHoldings,
+  })
 
   const refresh = useMutation({
     mutationFn: refreshPrices,
@@ -108,6 +111,23 @@ export function MyInvestmentsPage() {
   })
 
   if (isLoading) return <Spinner />
+
+  if (isError) {
+    return (
+      <Page title="My investments">
+        <ErrorBanner
+          message={
+            error instanceof ApiError
+              ? error.message
+              : "Couldn't load your investments. Check your connection and try again."
+          }
+        />
+        <Button className="mt-4" onClick={() => refetch()}>
+          Retry
+        </Button>
+      </Page>
+    )
+  }
 
   const grouped = new Map<string, { name: string; holdings: HoldingResponse[] }>()
   for (const holding of holdings ?? []) {

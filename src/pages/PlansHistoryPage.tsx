@@ -1,8 +1,8 @@
 import { useQuery } from '@tanstack/react-query'
 import { Link } from 'react-router-dom'
 import { getPlanHistory } from '../api/plans'
-import type { PlanStatus } from '../api/types'
-import { Card, Page, Spinner, formatDate, formatInr } from '../components/ui'
+import { ApiError, type PlanStatus } from '../api/types'
+import { Button, Card, ErrorBanner, Page, Spinner, formatDate, formatInr } from '../components/ui'
 
 const STATUS_LABEL: Record<PlanStatus, string> = {
   NOT_STARTED: 'Not started',
@@ -20,9 +20,29 @@ const STATUS_COLOR: Record<PlanStatus, string> = {
 
 /** Screen 7 — Plans/History. Active plan first, then history. No search/filters in V1. */
 export function PlansHistoryPage() {
-  const { data: plans, isLoading } = useQuery({ queryKey: ['plans'], queryFn: getPlanHistory })
+  const { data: plans, isLoading, isError, error, refetch } = useQuery({
+    queryKey: ['plans'],
+    queryFn: getPlanHistory,
+  })
 
   if (isLoading) return <Spinner />
+
+  if (isError) {
+    return (
+      <Page title="Investment plans">
+        <ErrorBanner
+          message={
+            error instanceof ApiError
+              ? error.message
+              : "Couldn't load your plans. Check your connection and try again."
+          }
+        />
+        <Button className="mt-4" onClick={() => refetch()}>
+          Retry
+        </Button>
+      </Page>
+    )
+  }
 
   return (
     <Page title="Investment plans">

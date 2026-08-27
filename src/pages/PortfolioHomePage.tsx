@@ -1,13 +1,17 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Link, useNavigate } from 'react-router-dom'
 import { getPortfolioHome, refreshPrices } from '../api/portfolio'
-import { Button, Card, Page, Spinner, formatDate, formatInr } from '../components/ui'
+import { ApiError } from '../api/types'
+import { Button, Card, ErrorBanner, Page, Spinner, formatDate, formatInr } from '../components/ui'
 
 /** Screen 4 — Portfolio Home. No daily P&L, news, or predictions (§6). */
 export function PortfolioHomePage() {
   const navigate = useNavigate()
   const queryClient = useQueryClient()
-  const { data, isLoading } = useQuery({ queryKey: ['portfolio'], queryFn: getPortfolioHome })
+  const { data, isLoading, isError, error, refetch } = useQuery({
+    queryKey: ['portfolio'],
+    queryFn: getPortfolioHome,
+  })
 
   const refresh = useMutation({
     mutationFn: refreshPrices,
@@ -15,7 +19,23 @@ export function PortfolioHomePage() {
   })
 
   if (isLoading) return <Spinner />
-  if (!data) return null
+
+  if (isError || !data) {
+    return (
+      <Page title="Your portfolio">
+        <ErrorBanner
+          message={
+            error instanceof ApiError
+              ? error.message
+              : "Couldn't load your portfolio. Check your connection and try again."
+          }
+        />
+        <Button className="mt-4" onClick={() => refetch()}>
+          Retry
+        </Button>
+      </Page>
+    )
+  }
 
   return (
     <Page title="Your portfolio">
