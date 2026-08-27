@@ -12,10 +12,15 @@ function HoldingRow({ holding }: { holding: HoldingResponse }) {
   const { data: categories } = useQuery({ queryKey: ['categories'], queryFn: getCategories })
   const [editing, setEditing] = useState(false)
   const [units, setUnits] = useState(String(holding.units))
+  const [rowError, setRowError] = useState<string | null>(null)
 
   function invalidate() {
     queryClient.invalidateQueries({ queryKey: ['holdings'] })
     queryClient.invalidateQueries({ queryKey: ['portfolio'] })
+  }
+
+  function describe(err: unknown, fallback: string) {
+    setRowError(err instanceof ApiError ? err.message : fallback)
   }
 
   const saveUnits = useMutation({
@@ -23,17 +28,27 @@ function HoldingRow({ holding }: { holding: HoldingResponse }) {
     onSuccess: () => {
       invalidate()
       setEditing(false)
+      setRowError(null)
     },
+    onError: (err) => describe(err, "Couldn't save units"),
   })
 
   const moveCategory = useMutation({
     mutationFn: (categoryId: string) => moveHoldingCategory(holding.id, categoryId),
-    onSuccess: invalidate,
+    onSuccess: () => {
+      invalidate()
+      setRowError(null)
+    },
+    onError: (err) => describe(err, "Couldn't move category"),
   })
 
   const remove = useMutation({
     mutationFn: () => removeHolding(holding.id),
-    onSuccess: invalidate,
+    onSuccess: () => {
+      invalidate()
+      setRowError(null)
+    },
+    onError: (err) => describe(err, "Couldn't remove this investment"),
   })
 
   return (
@@ -47,13 +62,15 @@ function HoldingRow({ holding }: { holding: HoldingResponse }) {
         </div>
         <button
           type="button"
-          className="text-xs text-slate-400 hover:text-red-600"
+          className="text-xs text-slate-400 hover:text-red-600 disabled:opacity-50"
+          disabled={remove.isPending}
           onClick={() => remove.mutate()}
         >
-          Remove
+          {remove.isPending ? 'Removing…' : 'Remove'}
         </button>
       </div>
 
+      {rowError && <div className="mt-1 text-xs text-red-600">{rowError}</div>}
       {!holding.priced && <div className="mt-1 text-xs text-amber-600">No price yet</div>}
       {holding.priceAsOf && (
         <div className="mt-1 text-xs text-slate-400">Priced as of {formatDate(holding.priceAsOf)}</div>
