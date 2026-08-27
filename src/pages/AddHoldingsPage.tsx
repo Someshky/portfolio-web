@@ -43,6 +43,19 @@ export function AddHoldingsPage() {
     return !('id' in candidate)
   }
 
+  /**
+   * AMFI's scheme name doesn't always spell out Direct/Regular or
+   * Growth/IDCW — pull it out of the name when present, and fall back to the
+   * scheme code so two identically-named results are still tellable apart.
+   */
+  function planLabel(candidate: ProviderInstrumentResponse): string {
+    const match = candidate.name.match(/\b(direct|regular)\s*(plan)?\b.*?\b(growth|idcw|dividend|bonus)\b/i)
+    if (match) {
+      return `${match[1]} · ${match[3]}`.replace(/\b\w/g, (c) => c.toUpperCase())
+    }
+    return `Scheme ${candidate.providerSymbol}`
+  }
+
   const add = useMutation({
     mutationFn: async () => {
       if (!selected || !categoryId || !units) throw new Error('Pick an instrument, category and units')
@@ -122,7 +135,9 @@ export function AddHoldingsPage() {
                 onClick={() => setSelected(r)}
               >
                 <div className="font-medium text-slate-900">{r.name}</div>
-                <div className="text-xs text-slate-500">Not in your list yet · {r.exchange ?? r.type}</div>
+                <div className="text-xs text-slate-500">
+                  Not in your list yet · {r.exchange ?? r.type} · {planLabel(r)}
+                </div>
               </button>
             ))}
             {debounced && !localResults?.length && !providerResults?.length && (
@@ -136,6 +151,9 @@ export function AddHoldingsPage() {
         <Card className="space-y-3">
           <div>
             <div className="font-medium text-slate-900">{selected.name}</div>
+            {isProviderOnly(selected) && (
+              <div className="text-xs text-slate-500">{planLabel(selected)}</div>
+            )}
             <button type="button" className="text-xs text-brand-600 underline" onClick={() => setSelected(null)}>
               Choose a different instrument
             </button>
