@@ -33,6 +33,14 @@ export default defineConfig({
             handler: 'NetworkOnly',
           },
         ],
+        // Without these, a new service worker sits in "waiting" until every
+        // open tab is closed — during frequent redeploys this stranded open
+        // tabs on an old app shell referencing JS chunks that no longer
+        // exist on the server, hanging on load. This makes a new version
+        // take over immediately instead.
+        skipWaiting: true,
+        clientsClaim: true,
+        cleanupOutdatedCaches: true,
       },
     }),
   ],

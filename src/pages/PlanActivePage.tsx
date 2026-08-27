@@ -119,7 +119,13 @@ export function PlanActivePage() {
   const queryClient = useQueryClient()
   const [error, setError] = useState<string | null>(null)
 
-  const { data: plan, isLoading } = useQuery({
+  const {
+    data: plan,
+    isLoading,
+    isError,
+    error: loadError,
+    refetch,
+  } = useQuery({
     queryKey: ['plan', planId],
     queryFn: () => getPlan(planId!),
     enabled: !!planId,
@@ -144,7 +150,23 @@ export function PlanActivePage() {
   })
 
   if (isLoading) return <Page title="Investment plan">Loading…</Page>
-  if (!plan) return null
+
+  if (isError || !plan) {
+    return (
+      <Page title="Investment plan">
+        <ErrorBanner
+          message={
+            loadError instanceof ApiError
+              ? loadError.message
+              : "Couldn't load this plan. Check your connection and try again."
+          }
+        />
+        <Button className="mt-4" onClick={() => refetch()}>
+          Retry
+        </Button>
+      </Page>
+    )
+  }
 
   return (
     <Page title="Investment plan">
