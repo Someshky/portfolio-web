@@ -25,7 +25,7 @@ export function PlanCalculatePage() {
   })
 
   return (
-    <Page title="Investment plan">
+    <Page title="Investment plan" onBack={() => navigate('/')}>
       {error && (
         <div className="mb-4">
           <ErrorBanner message={error} />

@@ -71,11 +71,11 @@ export function TargetAllocationPage() {
     setRows((prev) => prev.filter((_, i) => i !== index))
   }
 
-  if (isLoading) return <Page title="Your target allocation">Loading…</Page>
+  if (isLoading) return <Page title="Your target allocation" onBack={() => navigate(-1)}>Loading…</Page>
 
   if (isError) {
     return (
-      <Page title="Your target allocation">
+      <Page title="Your target allocation" onBack={() => navigate(-1)}>
         <ErrorBanner
           message={
             loadError instanceof ApiError
@@ -91,7 +91,7 @@ export function TargetAllocationPage() {
   }
 
   return (
-    <Page title="Your target allocation">
+    <Page title="Your target allocation" onBack={() => navigate(-1)}>
       <p className="mb-4 text-sm text-slate-500">How do you want to divide your portfolio?</p>
 
       {error && (

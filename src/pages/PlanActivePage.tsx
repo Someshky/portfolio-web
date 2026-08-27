@@ -164,11 +164,11 @@ export function PlanActivePage() {
     onError: (err) => setError(err instanceof ApiError ? err.message : 'Could not cancel the plan'),
   })
 
-  if (isLoading) return <Page title="Investment plan">Loading…</Page>
+  if (isLoading) return <Page title="Investment plan" onBack={() => navigate("/plans")}>Loading…</Page>
 
   if (isError || !plan) {
     return (
-      <Page title="Investment plan">
+      <Page title="Investment plan" onBack={() => navigate("/plans")}>
         <ErrorBanner
           message={
             loadError instanceof ApiError
@@ -184,7 +184,7 @@ export function PlanActivePage() {
   }
 
   return (
-    <Page title="Investment plan">
+    <Page title="Investment plan" onBack={() => navigate("/plans")}>
       {error && (
         <div className="mb-4">
           <ErrorBanner message={error} />

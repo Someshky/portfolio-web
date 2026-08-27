@@ -94,7 +94,7 @@ export function AddHoldingsPage() {
   })
 
   return (
-    <Page title="Add your existing investments">
+    <Page title="Add your existing investments" onBack={() => navigate(-1)}>
       <p className="mb-4 text-sm text-slate-500">
         Search by fund/ETF/stock name, ticker, or ISIN.
       </p>

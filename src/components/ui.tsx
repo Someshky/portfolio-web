@@ -25,9 +25,27 @@ export function formatDate(iso: string | null | undefined): string {
   })
 }
 
-export function Page({ title, children }: { title: string; children: ReactNode }) {
+export function Page({
+  title,
+  children,
+  onBack,
+}: {
+  title: string
+  children: ReactNode
+  /** Pass a handler (e.g. `() => navigate(-1)`) to show a "← Back" control above the title. */
+  onBack?: () => void
+}) {
   return (
     <div className="mx-auto max-w-md px-4 pb-24 pt-6">
+      {onBack && (
+        <button
+          type="button"
+          onClick={onBack}
+          className="mb-2 flex items-center gap-1 text-sm text-slate-500 hover:text-slate-700"
+        >
+          ← Back
+        </button>
+      )}
       <h1 className="mb-4 text-xl font-semibold text-slate-900">{title}</h1>
       {children}
     </div>
