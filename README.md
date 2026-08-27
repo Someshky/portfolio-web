@@ -1,32 +1,55 @@
-# React + TypeScript + Vite
+# Portfolio Investing App — Web
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+React + Vite + TypeScript PWA for the [portfolio-backend](../portfolio-backend) Spring Boot API.
+Installable as a home-screen app on iOS/Android via `vite-plugin-pwa`.
 
-Currently, two official plugins are available:
+## Stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- React + Vite + TypeScript
+- Tailwind CSS
+- TanStack Query (server state / caching / mutations)
+- react-router-dom
+- Firebase Auth (Google + email/password)
+- vite-plugin-pwa (manifest + service worker)
 
-## React Compiler
+## Local setup
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the Oxlint configuration
-
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
-
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+```bash
+npm install
+cp .env.example .env.local   # then fill in your Firebase web config
+npm run dev
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+`.env.local` needs:
+
+- `VITE_API_BASE_URL` — the backend's URL (`http://localhost:8080` locally, the Render URL once deployed).
+- `VITE_FIREBASE_*` — from Firebase Console → Project settings → General → Your apps → Web app.
+  These are all safe to expose client-side; they are not secrets.
+
+Without real Firebase config, the login screen degrades to a clear
+"Firebase isn't configured yet" message rather than a blank page.
+
+## Build
+
+```bash
+npm run build   # tsc -b && vite build, output in dist/
+```
+
+## Deploying (Vercel or Netlify)
+
+- Build command: `npm run build`
+- Output directory: `dist`
+- Env vars: same keys as `.env.local`, set in the platform's dashboard
+- After the backend is deployed, set `VITE_API_BASE_URL` to its real URL, and set the backend's
+  `CORS_ALLOWED_ORIGINS` env var to this app's real deployed URL.
+
+## Screens
+
+Maps 1:1 to the product spec's 9 screens — see `src/pages/`. Each page's data calls live in
+`src/api/*.ts`, one module per backend resource, typed to match `Dtos.java` in the backend.
+
+## Icons
+
+`public/icon-192.png`, `public/icon-512.png`, `public/apple-touch-icon.png`, and
+`public/favicon.svg` are placeholder solid-color squares. Replace them with real app icons before
+a real deploy — the PWA install prompt and iOS home-screen icon use these directly.
