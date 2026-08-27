@@ -19,6 +19,7 @@ export function AddHoldingsPage() {
   const [categoryId, setCategoryId] = useState('')
   const [units, setUnits] = useState('')
   const [error, setError] = useState<string | null>(null)
+  const [justAdded, setJustAdded] = useState<string | null>(null)
 
   useEffect(() => {
     const timer = setTimeout(() => setDebounced(query), 300)
@@ -54,14 +55,20 @@ export function AddHoldingsPage() {
       }
       return addHolding(instrumentId, categoryId, Number(units))
     },
-    onSuccess: () => {
+    onSuccess: (holding) => {
       queryClient.invalidateQueries({ queryKey: ['portfolio'] })
+      queryClient.invalidateQueries({ queryKey: ['holdings'] })
+      setJustAdded(holding.instrument.name)
       setSelected(null)
       setQuery('')
+      setCategoryId('')
       setUnits('')
       setError(null)
     },
-    onError: (err) => setError(err instanceof ApiError ? err.message : 'Could not add holding'),
+    onError: (err) => {
+      setJustAdded(null)
+      setError(err instanceof ApiError ? err.message : 'Could not add holding')
+    },
   })
 
   return (
@@ -76,12 +83,21 @@ export function AddHoldingsPage() {
         </div>
       )}
 
+      {justAdded && !selected && (
+        <div className="mb-4 rounded-lg bg-emerald-50 px-3 py-2 text-sm text-emerald-700">
+          Added {justAdded} to your portfolio.
+        </div>
+      )}
+
       {!selected && (
         <>
           <TextInput
             placeholder="Search instruments…"
             value={query}
-            onChange={(e) => setQuery(e.target.value)}
+            onChange={(e) => {
+              setQuery(e.target.value)
+              setJustAdded(null)
+            }}
           />
 
           <div className="mt-3 space-y-1.5">
