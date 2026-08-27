@@ -22,7 +22,10 @@ export function AddHoldingsPage() {
   const [justAdded, setJustAdded] = useState<string | null>(null)
 
   useEffect(() => {
-    const timer = setTimeout(() => setDebounced(query), 300)
+    // Longer than a typical local-only debounce: the provider search below
+    // hits Yahoo Finance's unofficial endpoint, which rate-limits aggressively
+    // on rapid-fire requests — this is the main lever for staying under that.
+    const timer = setTimeout(() => setDebounced(query), 600)
     return () => clearTimeout(timer)
   }, [query])
 
@@ -34,7 +37,10 @@ export function AddHoldingsPage() {
   const { data: providerResults } = useQuery({
     queryKey: ['instruments', 'provider', debounced],
     queryFn: () => searchProviderInstruments(debounced),
-    enabled: debounced.length > 0,
+    // A short query fans out to Yahoo on nearly every keystroke pause;
+    // requiring 3+ characters cuts that volume substantially.
+    enabled: debounced.length >= 3,
+    staleTime: 60_000,
   })
 
   function isProviderOnly(
