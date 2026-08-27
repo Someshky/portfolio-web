@@ -65,7 +65,7 @@ function RecordPurchaseRow({
   return (
     <Card className="space-y-2 p-3">
       <div className="flex items-center justify-between">
-        <span className="text-sm font-medium text-slate-900">{item.categoryName}</span>
+        <span className="text-sm font-medium text-stone-900">{item.categoryName}</span>
         <span className="text-sm font-semibold text-brand-700">{formatInr(item.recommendedAmount)}</span>
       </div>
 
@@ -74,7 +74,7 @@ function RecordPurchaseRow({
       {item.completed ? (
         <div className="text-xs font-medium text-emerald-600">Marked complete</div>
       ) : readOnly ? (
-        <div className="text-xs text-slate-400">Not recorded</div>
+        <div className="text-xs text-stone-400">Not recorded</div>
       ) : open ? (
         <div className="space-y-2">
           {!instrument ? (
@@ -85,7 +85,7 @@ function RecordPurchaseRow({
                   <button
                     key={r.id}
                     type="button"
-                    className="w-full rounded-md border border-slate-200 p-2 text-left text-xs hover:border-brand-400"
+                    className="w-full rounded-md border border-stone-200 p-2 text-left text-xs hover:border-brand-400"
                     onClick={() => setInstrument(r)}
                   >
                     {r.name}
@@ -95,7 +95,7 @@ function RecordPurchaseRow({
             </>
           ) : (
             <>
-              <div className="text-xs text-slate-500">{instrument.name}</div>
+              <div className="text-xs text-stone-500">{instrument.name}</div>
               <TextInput
                 type="number"
                 placeholder="Units purchased"
@@ -192,9 +192,9 @@ export function PlanActivePage() {
       )}
 
       <Card className="mb-4">
-        <div className="text-sm text-slate-500">Contribution</div>
-        <div className="text-xl font-semibold text-slate-900">{formatInr(plan.contribution)}</div>
-        <div className="mt-1 text-xs text-slate-400">Status: {plan.status.replace('_', ' ')}</div>
+        <div className="text-sm text-stone-500">Contribution</div>
+        <div className="font-serif text-2xl text-stone-900">{formatInr(plan.contribution)}</div>
+        <div className="mt-1 text-xs text-stone-400">Status: {plan.status.replace('_', ' ')}</div>
       </Card>
 
       <div className="space-y-2">

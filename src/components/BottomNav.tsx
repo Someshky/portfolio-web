@@ -9,7 +9,7 @@ const items = [
 
 export function BottomNav() {
   return (
-    <nav className="fixed inset-x-0 bottom-0 z-10 border-t border-slate-200 bg-white pb-[env(safe-area-inset-bottom)]">
+    <nav className="fixed inset-x-0 bottom-0 z-10 border-t border-stone-200 bg-white pb-[env(safe-area-inset-bottom)]">
       <div className="mx-auto flex max-w-md">
         {items.map((item) => (
           <NavLink
@@ -18,7 +18,7 @@ export function BottomNav() {
             end={item.to === '/'}
             className={({ isActive }) =>
               `flex-1 py-3 text-center text-xs font-medium ${
-                isActive ? 'text-brand-600' : 'text-slate-500'
+                isActive ? 'text-brand-600' : 'text-stone-500'
               }`
             }
           >

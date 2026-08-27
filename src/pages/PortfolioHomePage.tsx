@@ -51,14 +51,14 @@ export function PortfolioHomePage() {
   return (
     <Page title="Your portfolio">
       {refreshMessage && (
-        <div className="mb-4 rounded-lg bg-slate-100 px-3 py-2 text-sm text-slate-600">
+        <div className="mb-4 rounded-lg bg-stone-100 px-3 py-2 text-sm text-stone-600">
           {refreshMessage}
         </div>
       )}
       <Card className="mb-4">
-        <div className="text-sm text-slate-500">Total value</div>
-        <div className="text-2xl font-semibold text-slate-900">{formatInr(data.portfolioValueInr)}</div>
-        <div className="mt-1 flex items-center justify-between text-xs text-slate-400">
+        <div className="text-sm text-stone-500">Total value</div>
+        <div className="font-serif text-3xl text-stone-900">{formatInr(data.portfolioValueInr)}</div>
+        <div className="mt-1 flex items-center justify-between text-xs text-stone-400">
           <span>Prices as of {formatDate(data.pricesAsOf)}</span>
           <button
             type="button"
@@ -87,28 +87,28 @@ export function PortfolioHomePage() {
         </Card>
       )}
 
-      <div className="mb-2 text-sm font-medium text-slate-700">Current vs target</div>
+      <div className="mb-2 text-sm font-medium text-stone-700">Current vs target</div>
       <div className="space-y-2">
         {data.allocation.map((row) => (
           <Card key={row.categoryId} className="p-3">
             <div className="flex items-center justify-between text-sm">
-              <span className="font-medium text-slate-900">{row.name}</span>
-              <span className="text-slate-500">
-                {formatPercent(row.currentPercent)} <span className="text-slate-300">/</span>{' '}
+              <span className="font-medium text-stone-900">{row.name}</span>
+              <span className="text-stone-500">
+                {formatPercent(row.currentPercent)} <span className="text-stone-300">/</span>{' '}
                 {formatPercent(row.targetPercent)} target
               </span>
             </div>
-            <div className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-slate-100">
+            <div className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-stone-100">
               <div
                 className="h-full rounded-full bg-brand-500"
                 style={{ width: `${Math.min(100, row.currentPercent)}%` }}
               />
             </div>
-            <div className="mt-1 text-xs text-slate-400">{formatInr(row.currentValueInr)}</div>
+            <div className="mt-1 text-xs text-stone-400">{formatInr(row.currentValueInr)}</div>
           </Card>
         ))}
         {data.allocation.length === 0 && (
-          <p className="py-6 text-center text-sm text-slate-400">
+          <p className="py-6 text-center text-sm text-stone-400">
             No categories yet.{' '}
             <Link to="/setup/categories" className="text-brand-600 underline">
               Set your targets

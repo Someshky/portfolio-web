@@ -95,7 +95,7 @@ export function AddHoldingsPage() {
 
   return (
     <Page title="Add your existing investments" onBack={() => navigate(-1)}>
-      <p className="mb-4 text-sm text-slate-500">
+      <p className="mb-4 text-sm text-stone-500">
         Search by fund/ETF/stock name, ticker, or ISIN.
       </p>
 
@@ -127,11 +127,11 @@ export function AddHoldingsPage() {
               <button
                 key={r.id}
                 type="button"
-                className="w-full rounded-lg border border-slate-200 bg-white p-3 text-left text-sm hover:border-brand-400"
+                className="w-full rounded-lg border border-stone-200 bg-white p-3 text-left text-sm hover:border-brand-400"
                 onClick={() => setSelected(r)}
               >
-                <div className="font-medium text-slate-900">{r.name}</div>
-                <div className="text-xs text-slate-500">
+                <div className="font-medium text-stone-900">{r.name}</div>
+                <div className="text-xs text-stone-500">
                   {r.ticker ?? r.isin ?? r.exchange ?? ''}
                 </div>
               </button>
@@ -140,11 +140,11 @@ export function AddHoldingsPage() {
               <button
                 key={r.providerSymbol}
                 type="button"
-                className="w-full rounded-lg border border-dashed border-slate-300 bg-white p-3 text-left text-sm hover:border-brand-400"
+                className="w-full rounded-lg border border-dashed border-stone-300 bg-white p-3 text-left text-sm hover:border-brand-400"
                 onClick={() => setSelected(r)}
               >
-                <div className="font-medium text-slate-900">{r.name}</div>
-                <div className="text-xs text-slate-500">
+                <div className="font-medium text-stone-900">{r.name}</div>
+                <div className="text-xs text-stone-500">
                   Not in your list yet · {r.exchange ?? r.type} · {planLabel(r)}
                 </div>
               </button>
@@ -156,7 +156,7 @@ export function AddHoldingsPage() {
             )}
             {debounced && !localResults?.length && !providerResults?.length
               && !localSearchFailed && !providerSearchFailed && (
-              <p className="py-4 text-center text-sm text-slate-400">No matches yet</p>
+              <p className="py-4 text-center text-sm text-stone-400">No matches yet</p>
             )}
           </div>
         </>
@@ -165,9 +165,9 @@ export function AddHoldingsPage() {
       {selected && (
         <Card className="space-y-3">
           <div>
-            <div className="font-medium text-slate-900">{selected.name}</div>
+            <div className="font-medium text-stone-900">{selected.name}</div>
             {isProviderOnly(selected) && (
-              <div className="text-xs text-slate-500">{planLabel(selected)}</div>
+              <div className="text-xs text-stone-500">{planLabel(selected)}</div>
             )}
             <button type="button" className="text-xs text-brand-600 underline" onClick={() => setSelected(null)}>
               Choose a different instrument
@@ -178,7 +178,7 @@ export function AddHoldingsPage() {
             <div className="text-xs text-red-600">Couldn't load your categories — try reloading.</div>
           )}
           <select
-            className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"
+            className="w-full rounded-lg border border-stone-300 px-3 py-2 text-sm"
             value={categoryId}
             onChange={(e) => setCategoryId(e.target.value)}
           >

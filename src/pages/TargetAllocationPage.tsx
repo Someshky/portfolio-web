@@ -92,7 +92,7 @@ export function TargetAllocationPage() {
 
   return (
     <Page title="Your target allocation" onBack={() => navigate(-1)}>
-      <p className="mb-4 text-sm text-slate-500">How do you want to divide your portfolio?</p>
+      <p className="mb-4 text-sm text-stone-500">How do you want to divide your portfolio?</p>
 
       {error && (
         <div className="mb-4">
@@ -129,7 +129,7 @@ export function TargetAllocationPage() {
             <button
               type="button"
               aria-label="Remove category"
-              className="px-1 text-slate-400 hover:text-red-600"
+              className="px-1 text-stone-400 hover:text-red-600"
               onClick={() => removeRow(i)}
             >
               ✕
@@ -140,14 +140,14 @@ export function TargetAllocationPage() {
 
       <button
         type="button"
-        className="mt-3 w-full rounded-lg border border-dashed border-slate-300 py-2 text-sm text-slate-500 hover:border-brand-400 hover:text-brand-600"
+        className="mt-3 w-full rounded-lg border border-dashed border-stone-300 py-2 text-sm text-stone-500 hover:border-brand-400 hover:text-brand-600"
         onClick={() => setRows((prev) => [...prev, { id: null, name: '', targetPercent: '' }])}
       >
         + Add category
       </button>
 
       <div className="mt-4 flex items-center justify-between text-sm">
-        <span className="text-slate-500">Total</span>
+        <span className="text-stone-500">Total</span>
         <span className={total === 100 ? 'font-medium text-emerald-600' : 'font-medium text-red-600'}>
           {total}%
         </span>

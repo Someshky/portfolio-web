@@ -31,13 +31,19 @@ export function LoginPage() {
 
   return (
     <div className="mx-auto flex min-h-svh max-w-md flex-col justify-center px-6">
-      <div className="mb-10 text-center">
-        <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-brand-600 text-2xl font-bold text-white">
-          P
-        </div>
-        <h1 className="text-2xl font-semibold text-slate-900">
-          See where your next investment should go, based on the targets you choose.
+      <div className="mb-8 font-serif text-xl text-stone-900">Portfolio.</div>
+      <div className="mb-10">
+        <p className="mb-3 text-xs font-semibold uppercase tracking-widest text-brand-600">
+          Invest with a plan
+        </p>
+        <h1 className="mb-3 font-serif text-4xl leading-[1.1] text-stone-900">
+          Invest consistently.
+          <br />
+          Stay aligned with your plan.
         </h1>
+        <p className="text-sm text-stone-500">
+          See where your next investment should go, based on the targets you choose.
+        </p>
       </div>
 
       {error && (
@@ -61,10 +67,10 @@ export function LoginPage() {
           Continue with Google
         </Button>
 
-        <div className="flex items-center gap-3 py-1 text-xs text-slate-400">
-          <div className="h-px flex-1 bg-slate-200" />
+        <div className="flex items-center gap-3 py-1 text-xs text-stone-400">
+          <div className="h-px flex-1 bg-stone-200" />
           or with email
-          <div className="h-px flex-1 bg-slate-200" />
+          <div className="h-px flex-1 bg-stone-200" />
         </div>
 
         <TextInput
@@ -92,7 +98,7 @@ export function LoginPage() {
 
         <button
           type="button"
-          className="w-full text-center text-xs text-slate-500"
+          className="w-full text-center text-xs text-stone-500"
           onClick={() => setMode(mode === 'signin' ? 'signup' : 'signin')}
         >
           {mode === 'signin' ? "New here? Create an account" : 'Already have an account? Sign in'}

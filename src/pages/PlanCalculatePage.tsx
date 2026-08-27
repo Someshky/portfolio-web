@@ -34,7 +34,7 @@ export function PlanCalculatePage() {
 
       {!plan && (
         <Card className="space-y-3">
-          <p className="text-sm text-slate-500">How much do you want to invest this time?</p>
+          <p className="text-sm text-stone-500">How much do you want to invest this time?</p>
           <TextInput
             type="number"
             placeholder="e.g. 10000"
@@ -50,26 +50,26 @@ export function PlanCalculatePage() {
       {plan && (
         <>
           <Card className="mb-4">
-            <div className="text-sm text-slate-500">Total contribution</div>
-            <div className="text-2xl font-semibold text-slate-900">{formatInr(plan.contribution)}</div>
+            <div className="text-sm text-stone-500">Total contribution</div>
+            <div className="font-serif text-3xl text-stone-900">{formatInr(plan.contribution)}</div>
           </Card>
 
-          <p className="mb-3 text-sm text-slate-600">
+          <p className="mb-3 text-sm text-stone-600">
             We use your new investment to bring your portfolio closer to the targets you chose.
           </p>
 
-          <div className="mb-2 text-sm font-medium text-slate-700">Invest this time</div>
+          <div className="mb-2 text-sm font-medium text-stone-700">Invest this time</div>
           <div className="space-y-2">
             {plan.investing.map((item) => (
               <Card key={item.id} className="flex items-center justify-between p-3">
-                <span className="text-sm font-medium text-slate-900">{item.categoryName}</span>
+                <span className="text-sm font-medium text-stone-900">{item.categoryName}</span>
                 <span className="text-sm font-semibold text-brand-700">
                   {formatInr(item.recommendedAmount)}
                 </span>
               </Card>
             ))}
             {plan.investing.length === 0 && (
-              <p className="py-4 text-center text-sm text-slate-400">
+              <p className="py-4 text-center text-sm text-stone-400">
                 Nothing is below target right now.
               </p>
             )}
@@ -77,14 +77,14 @@ export function PlanCalculatePage() {
 
           {plan.notInvesting.length > 0 && (
             <details className="mt-3">
-              <summary className="cursor-pointer text-sm text-slate-500">
+              <summary className="cursor-pointer text-sm text-stone-500">
                 Not investing this time ({plan.notInvesting.length})
               </summary>
               <div className="mt-2 space-y-2">
                 {plan.notInvesting.map((item) => (
                   <Card key={item.id} className="flex items-center justify-between p-3">
-                    <span className="text-sm text-slate-600">{item.categoryName}</span>
-                    <span className="text-xs text-slate-400">already at or above target</span>
+                    <span className="text-sm text-stone-600">{item.categoryName}</span>
+                    <span className="text-xs text-stone-400">already at or above target</span>
                   </Card>
                 ))}
               </div>

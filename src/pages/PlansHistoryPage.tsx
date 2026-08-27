@@ -12,10 +12,10 @@ const STATUS_LABEL: Record<PlanStatus, string> = {
 }
 
 const STATUS_COLOR: Record<PlanStatus, string> = {
-  NOT_STARTED: 'text-slate-500',
+  NOT_STARTED: 'text-stone-500',
   IN_PROGRESS: 'text-brand-600',
   COMPLETED: 'text-emerald-600',
-  CANCELLED: 'text-slate-400',
+  CANCELLED: 'text-stone-400',
 }
 
 /** Screen 7 — Plans/History. Active plan first, then history. No search/filters in V1. */
@@ -51,8 +51,8 @@ export function PlansHistoryPage() {
           <Link key={plan.id} to={`/plans/${plan.id}`}>
             <Card className="flex items-center justify-between p-3">
               <div>
-                <div className="text-sm font-medium text-slate-900">{formatInr(plan.contribution)}</div>
-                <div className="text-xs text-slate-400">{formatDate(plan.createdAt)}</div>
+                <div className="text-sm font-medium text-stone-900">{formatInr(plan.contribution)}</div>
+                <div className="text-xs text-stone-400">{formatDate(plan.createdAt)}</div>
               </div>
               <span className={`text-xs font-medium ${STATUS_COLOR[plan.status]}`}>
                 {STATUS_LABEL[plan.status]}
@@ -61,7 +61,7 @@ export function PlansHistoryPage() {
           </Link>
         ))}
         {(plans ?? []).length === 0 && (
-          <p className="py-10 text-center text-sm text-slate-400">No plans yet.</p>
+          <p className="py-10 text-center text-sm text-stone-400">No plans yet.</p>
         )}
       </div>
     </Page>

@@ -58,14 +58,14 @@ function HoldingRow({ holding }: { holding: HoldingResponse }) {
     <Card className="p-3">
       <div className="flex items-center justify-between">
         <div>
-          <div className="text-sm font-medium text-slate-900">{holding.instrument.name}</div>
-          <div className="text-xs text-slate-400">
+          <div className="text-sm font-medium text-stone-900">{holding.instrument.name}</div>
+          <div className="text-xs text-stone-400">
             {editing ? null : `${holding.units} units`} · {formatInr(holding.valueInr)}
           </div>
         </div>
         <button
           type="button"
-          className="text-xs text-slate-400 hover:text-red-600 disabled:opacity-50"
+          className="text-xs text-stone-400 hover:text-red-600 disabled:opacity-50"
           disabled={remove.isPending}
           onClick={() => remove.mutate()}
         >
@@ -76,7 +76,7 @@ function HoldingRow({ holding }: { holding: HoldingResponse }) {
       {rowError && <div className="mt-1 text-xs text-red-600">{rowError}</div>}
       {!holding.priced && <div className="mt-1 text-xs text-amber-600">No price yet</div>}
       {holding.priceAsOf && (
-        <div className="mt-1 text-xs text-slate-400">Priced as of {formatDate(holding.priceAsOf)}</div>
+        <div className="mt-1 text-xs text-stone-400">Priced as of {formatDate(holding.priceAsOf)}</div>
       )}
 
       <div className="mt-2 flex items-center gap-2">
@@ -99,7 +99,7 @@ function HoldingRow({ holding }: { holding: HoldingResponse }) {
         )}
 
         <select
-          className="ml-auto rounded-md border border-slate-200 px-2 py-1 text-xs"
+          className="ml-auto rounded-md border border-stone-200 px-2 py-1 text-xs"
           value={holding.categoryId}
           onChange={(e) => moveCategory.mutate(e.target.value)}
           disabled={categoriesFailed}
@@ -169,7 +169,7 @@ export function MyInvestmentsPage() {
   return (
     <Page title="My investments">
       {refreshMessage && (
-        <div className="mb-4 rounded-lg bg-slate-100 px-3 py-2 text-sm text-slate-600">
+        <div className="mb-4 rounded-lg bg-stone-100 px-3 py-2 text-sm text-stone-600">
           {refreshMessage}
         </div>
       )}
@@ -179,7 +179,7 @@ export function MyInvestmentsPage() {
         </Link>
         <button
           type="button"
-          className="text-sm text-slate-500 disabled:opacity-50"
+          className="text-sm text-stone-500 disabled:opacity-50"
           disabled={refresh.isPending}
           onClick={() => refresh.mutate()}
         >
@@ -189,7 +189,7 @@ export function MyInvestmentsPage() {
 
       {[...grouped.entries()].map(([categoryId, bucket]) => (
         <div key={categoryId} className="mb-5">
-          <div className="mb-2 text-sm font-medium text-slate-700">{bucket.name}</div>
+          <div className="mb-2 text-sm font-medium text-stone-700">{bucket.name}</div>
           <div className="space-y-2">
             {bucket.holdings.map((h) => (
               <HoldingRow key={h.id} holding={h} />
@@ -198,7 +198,7 @@ export function MyInvestmentsPage() {
         </div>
       ))}
 
-      {grouped.size === 0 && <p className="py-10 text-center text-sm text-slate-400">No investments yet.</p>}
+      {grouped.size === 0 && <p className="py-10 text-center text-sm text-stone-400">No investments yet.</p>}
     </Page>
   )
 }

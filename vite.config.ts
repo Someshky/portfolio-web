@@ -13,8 +13,8 @@ export default defineConfig({
         name: 'Portfolio',
         short_name: 'Portfolio',
         description: 'Invest consistently and keep your portfolio aligned with your plan.',
-        theme_color: '#1d4ed8',
-        background_color: '#f8fafc',
+        theme_color: '#1f4b3f',
+        background_color: '#f6f4ee',
         display: 'standalone',
         start_url: '/',
         icons: [

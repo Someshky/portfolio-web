@@ -41,16 +41,16 @@ export function SettingsPage() {
 
       <div className="space-y-2">
         <Link to="/setup/categories">
-          <Card className="p-3 text-sm font-medium text-slate-900">Target allocation</Card>
+          <Card className="p-3 text-sm font-medium text-stone-900">Target allocation</Card>
         </Link>
         <Link to="/holdings">
-          <Card className="p-3 text-sm font-medium text-slate-900">My investments</Card>
+          <Card className="p-3 text-sm font-medium text-stone-900">My investments</Card>
         </Link>
       </div>
 
       <Card className="mt-6">
-        <div className="text-xs text-slate-400">Signed in as</div>
-        <div className="text-sm font-medium text-slate-900">
+        <div className="text-xs text-stone-400">Signed in as</div>
+        <div className="text-sm font-medium text-stone-900">
           {meFailed ? <span className="text-red-600">Couldn't load</span> : (me?.email ?? '—')}
         </div>
         <Button variant="secondary" className="mt-3" onClick={() => signOut().then(() => navigate('/login'))}>
@@ -60,7 +60,7 @@ export function SettingsPage() {
 
       <Card className="mt-6 border-red-100">
         <div className="text-sm font-medium text-red-700">Delete account</div>
-        <p className="mt-1 text-xs text-slate-500">
+        <p className="mt-1 text-xs text-stone-500">
           Permanently removes your account and portfolio data. This cannot be undone.
         </p>
         {confirmingDelete ? (
