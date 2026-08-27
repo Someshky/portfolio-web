@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Link, useNavigate } from 'react-router-dom'
 import { getPortfolioHome, refreshPrices } from '../api/portfolio'
 import { ApiError } from '../api/types'
-import { Button, Card, ErrorBanner, Page, Spinner, formatDate, formatInr } from '../components/ui'
+import { Button, Card, ErrorBanner, Page, Spinner, formatDate, formatInr, formatPercent } from '../components/ui'
 
 /** Screen 4 — Portfolio Home. No daily P&L, news, or predictions (§6). */
 export function PortfolioHomePage() {
@@ -78,8 +78,8 @@ export function PortfolioHomePage() {
             <div className="flex items-center justify-between text-sm">
               <span className="font-medium text-slate-900">{row.name}</span>
               <span className="text-slate-500">
-                {row.currentPercent}% <span className="text-slate-300">/</span> {row.targetPercent}%
-                target
+                {formatPercent(row.currentPercent)} <span className="text-slate-300">/</span>{' '}
+                {formatPercent(row.targetPercent)} target
               </span>
             </div>
             <div className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-slate-100">

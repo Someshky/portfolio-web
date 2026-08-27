@@ -9,6 +9,12 @@ export function formatInr(value: number | null | undefined): string {
   }).format(value)
 }
 
+/** Spec: current allocation percentages match the sheet to one decimal place. */
+export function formatPercent(value: number | null | undefined): string {
+  if (value === null || value === undefined) return '—'
+  return `${value.toFixed(1)}%`
+}
+
 export function formatDate(iso: string | null | undefined): string {
   if (!iso) return 'never'
   return new Date(iso).toLocaleString('en-IN', {
