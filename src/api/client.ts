@@ -35,14 +35,18 @@ export async function apiFetch<T>(path: string, options: RequestOptions = {}): P
   }
 
   if (!response.ok) {
-    let detail = response.statusText
+    // HTTP/2 responses often have an empty statusText, and a gateway timeout
+    // (e.g. Render's free tier waking from cold-start) returns an HTML page,
+    // not our normal JSON error body — always fall back to something
+    // non-blank rather than risk an empty error message.
+    let detail = response.statusText || `Request failed (HTTP ${response.status})`
     let code: string | undefined
     try {
       const problem = await response.json()
-      detail = problem.detail ?? detail
+      detail = problem.detail || detail
       code = problem.code
     } catch {
-      // Non-JSON error body — fall back to statusText.
+      // Non-JSON error body — keep the fallback above.
     }
     throw new ApiError(detail, response.status, code)
   }
