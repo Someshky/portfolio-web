@@ -103,7 +103,7 @@ export function PlanCalculatePage() {
               />
               <Button
                 variant="secondary"
-                className="w-auto shrink-0"
+                className="!w-auto shrink-0"
                 disabled={!amount || recalculate.isPending}
                 onClick={() => recalculate.mutate()}
               >

@@ -91,7 +91,7 @@ function RecordPurchaseRow({
                 <Button disabled={!units || record.isPending} onClick={() => record.mutate()}>
                   Record purchase
                 </Button>
-                <Button variant="secondary" className="w-auto shrink-0" onClick={() => setInstrument(null)}>
+                <Button variant="secondary" className="!w-auto shrink-0" onClick={() => setInstrument(null)}>
                   Back
                 </Button>
               </div>
@@ -103,7 +103,7 @@ function RecordPurchaseRow({
           <Button variant="secondary" onClick={() => setOpen(true)}>
             Record a purchase
           </Button>
-          <Button variant="secondary" className="w-auto shrink-0" onClick={() => complete.mutate()}>
+          <Button variant="secondary" className="!w-auto shrink-0" onClick={() => complete.mutate()}>
             Mark complete
           </Button>
         </div>

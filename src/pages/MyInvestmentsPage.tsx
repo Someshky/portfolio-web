@@ -85,7 +85,7 @@ function HoldingRow({ holding }: { holding: HoldingResponse }) {
               onChange={(e) => setUnits(e.target.value)}
               className="w-24"
             />
-            <Button className="w-auto shrink-0" disabled={saveUnits.isPending} onClick={() => saveUnits.mutate()}>
+            <Button className="!w-auto shrink-0" disabled={saveUnits.isPending} onClick={() => saveUnits.mutate()}>
               Save
             </Button>
           </>
