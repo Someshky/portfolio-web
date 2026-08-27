@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { getPortfolioHome, refreshPrices } from '../api/portfolio'
 import { ApiError } from '../api/types'
-import { Button, Card, ErrorBanner, Page, Spinner, formatDate, formatInr, formatPercent } from '../components/ui'
+import { Button, Card, ErrorBanner, EyeToggle, MaskedInr, Page, Spinner, formatDate, formatInr, formatPercent } from '../components/ui'
 
 /** Screen 4 — Portfolio Home. No daily P&L, news, or predictions (§6). */
 export function PortfolioHomePage() {
@@ -56,8 +56,13 @@ export function PortfolioHomePage() {
         </div>
       )}
       <Card className="mb-4">
-        <div className="text-sm text-stone-500">Total value</div>
-        <div className="font-serif text-3xl text-stone-900">{formatInr(data.portfolioValueInr)}</div>
+        <div className="flex items-center justify-between">
+          <div className="text-sm text-stone-500">Total value</div>
+          <EyeToggle />
+        </div>
+        <div className="font-serif text-3xl text-stone-900">
+          <MaskedInr value={data.portfolioValueInr} />
+        </div>
         <div className="mt-1 flex items-center justify-between text-xs text-stone-400">
           <span>Prices as of {formatDate(data.pricesAsOf)}</span>
           <button
@@ -104,7 +109,9 @@ export function PortfolioHomePage() {
                 style={{ width: `${Math.min(100, row.currentPercent)}%` }}
               />
             </div>
-            <div className="mt-1 text-xs text-stone-400">{formatInr(row.currentValueInr)}</div>
+            <div className="mt-1 text-xs text-stone-400">
+              <MaskedInr value={row.currentValueInr} />
+            </div>
           </Card>
         ))}
         {data.allocation.length === 0 && (

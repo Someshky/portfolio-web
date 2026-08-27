@@ -5,7 +5,7 @@ import { getCategories } from '../api/categories'
 import { moveHoldingCategory, removeHolding, updateHoldingUnits } from '../api/holdings'
 import { getHoldings, refreshPrices } from '../api/portfolio'
 import { ApiError, type HoldingResponse } from '../api/types'
-import { Button, Card, ErrorBanner, Page, Spinner, TextInput, formatDate, formatInr } from '../components/ui'
+import { Button, Card, ErrorBanner, EyeToggle, MaskedInr, Page, Spinner, TextInput, formatDate } from '../components/ui'
 
 function HoldingRow({ holding }: { holding: HoldingResponse }) {
   const queryClient = useQueryClient()
@@ -60,7 +60,7 @@ function HoldingRow({ holding }: { holding: HoldingResponse }) {
         <div>
           <div className="text-sm font-medium text-stone-900">{holding.instrument.name}</div>
           <div className="text-xs text-stone-400">
-            {editing ? null : `${holding.units} units`} · {formatInr(holding.valueInr)}
+            {editing ? null : `${holding.units} units`} · <MaskedInr value={holding.valueInr} />
           </div>
         </div>
         <button
@@ -177,14 +177,17 @@ export function MyInvestmentsPage() {
         <Link to="/setup/holdings" className="text-sm text-brand-600 underline">
           + Add investment
         </Link>
-        <button
-          type="button"
-          className="text-sm text-stone-500 disabled:opacity-50"
-          disabled={refresh.isPending}
-          onClick={() => refresh.mutate()}
-        >
-          {refresh.isPending ? 'Refreshing…' : 'Refresh prices'}
-        </button>
+        <div className="flex items-center gap-3">
+          <button
+            type="button"
+            className="text-sm text-stone-500 disabled:opacity-50"
+            disabled={refresh.isPending}
+            onClick={() => refresh.mutate()}
+          >
+            {refresh.isPending ? 'Refreshing…' : 'Refresh prices'}
+          </button>
+          <EyeToggle />
+        </div>
       </div>
 
       {[...grouped.entries()].map(([categoryId, bucket]) => (

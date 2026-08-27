@@ -1,4 +1,5 @@
 import type { ButtonHTMLAttributes, ReactNode } from 'react'
+import { useAmountVisibility } from '../context/AmountVisibilityContext'
 
 export function formatInr(value: number | null | undefined): string {
   if (value === null || value === undefined) return '—'
@@ -94,5 +95,39 @@ export function Spinner() {
 export function ErrorBanner({ message }: { message: string }) {
   return (
     <div className="rounded-xl bg-red-50 px-3 py-2 text-sm text-red-700">{message}</div>
+  )
+}
+
+/** Renders a rupee amount, replaced with a mask until the user reveals amounts. */
+export function MaskedInr({ value, className = '' }: { value: number | null | undefined; className?: string }) {
+  const { visible } = useAmountVisibility()
+  return <span className={className}>{visible ? formatInr(value) : '₹••,•••'}</span>
+}
+
+/** Eye / eye-slash toggle for the shared "amounts hidden" state. */
+export function EyeToggle({ className = '' }: { className?: string }) {
+  const { visible, toggle } = useAmountVisibility()
+  return (
+    <button
+      type="button"
+      onClick={toggle}
+      aria-label={visible ? 'Hide amounts' : 'Show amounts'}
+      title={visible ? 'Hide amounts' : 'Show amounts'}
+      className={`text-stone-400 hover:text-stone-600 ${className}`}
+    >
+      {visible ? (
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5">
+          <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7Z" />
+          <circle cx="12" cy="12" r="3" />
+        </svg>
+      ) : (
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5">
+          <path d="M17.94 17.94A10.94 10.94 0 0 1 12 19c-7 0-11-7-11-7a21.86 21.86 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 7 11 7a21.86 21.86 0 0 1-2.16 3.19M14.12 14.12a3 3 0 1 1-4.24-4.24" />
+          <line x1="1" y1="1" x2="23" y2="23" />
+        </svg>
+      )}
+    </button>
   )
 }
