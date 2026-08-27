@@ -21,7 +21,13 @@ const EXAMPLE: Row[] = [
 export function TargetAllocationPage() {
   const navigate = useNavigate()
   const queryClient = useQueryClient()
-  const { data: categories, isLoading } = useQuery({
+  const {
+    data: categories,
+    isLoading,
+    isError,
+    error: loadError,
+    refetch,
+  } = useQuery({
     queryKey: ['categories'],
     queryFn: getCategories,
   })
@@ -66,6 +72,23 @@ export function TargetAllocationPage() {
   }
 
   if (isLoading) return <Page title="Your target allocation">Loading…</Page>
+
+  if (isError) {
+    return (
+      <Page title="Your target allocation">
+        <ErrorBanner
+          message={
+            loadError instanceof ApiError
+              ? loadError.message
+              : "Couldn't load your categories. Check your connection and try again."
+          }
+        />
+        <Button className="mt-4" onClick={() => refetch()}>
+          Retry
+        </Button>
+      </Page>
+    )
+  }
 
   return (
     <Page title="Your target allocation">

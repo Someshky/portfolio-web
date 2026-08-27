@@ -11,7 +11,10 @@ import { Button, Card, ErrorBanner, Page, TextInput } from '../components/ui'
 export function AddHoldingsPage() {
   const navigate = useNavigate()
   const queryClient = useQueryClient()
-  const { data: categories } = useQuery({ queryKey: ['categories'], queryFn: getCategories })
+  const { data: categories, isError: categoriesFailed } = useQuery({
+    queryKey: ['categories'],
+    queryFn: getCategories,
+  })
 
   const [query, setQuery] = useState('')
   const [debounced, setDebounced] = useState('')
@@ -29,12 +32,12 @@ export function AddHoldingsPage() {
     return () => clearTimeout(timer)
   }, [query])
 
-  const { data: localResults } = useQuery({
+  const { data: localResults, isError: localSearchFailed } = useQuery({
     queryKey: ['instruments', 'local', debounced],
     queryFn: () => searchInstruments(debounced),
     enabled: debounced.length > 0,
   })
-  const { data: providerResults } = useQuery({
+  const { data: providerResults, isError: providerSearchFailed } = useQuery({
     queryKey: ['instruments', 'provider', debounced],
     queryFn: () => searchProviderInstruments(debounced),
     // A short query fans out to Yahoo on nearly every keystroke pause;
@@ -146,7 +149,13 @@ export function AddHoldingsPage() {
                 </div>
               </button>
             ))}
-            {debounced && !localResults?.length && !providerResults?.length && (
+            {(localSearchFailed || providerSearchFailed) && (
+              <p className="py-2 text-center text-xs text-red-600">
+                Search failed — check your connection and try again.
+              </p>
+            )}
+            {debounced && !localResults?.length && !providerResults?.length
+              && !localSearchFailed && !providerSearchFailed && (
               <p className="py-4 text-center text-sm text-slate-400">No matches yet</p>
             )}
           </div>
@@ -165,6 +174,9 @@ export function AddHoldingsPage() {
             </button>
           </div>
 
+          {categoriesFailed && (
+            <div className="text-xs text-red-600">Couldn't load your categories — try reloading.</div>
+          )}
           <select
             className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"
             value={categoryId}

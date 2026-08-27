@@ -9,7 +9,10 @@ import { Button, Card, ErrorBanner, Page, Spinner, TextInput, formatDate, format
 
 function HoldingRow({ holding }: { holding: HoldingResponse }) {
   const queryClient = useQueryClient()
-  const { data: categories } = useQuery({ queryKey: ['categories'], queryFn: getCategories })
+  const { data: categories, isError: categoriesFailed } = useQuery({
+    queryKey: ['categories'],
+    queryFn: getCategories,
+  })
   const [editing, setEditing] = useState(false)
   const [units, setUnits] = useState(String(holding.units))
   const [rowError, setRowError] = useState<string | null>(null)
@@ -99,6 +102,8 @@ function HoldingRow({ holding }: { holding: HoldingResponse }) {
           className="ml-auto rounded-md border border-slate-200 px-2 py-1 text-xs"
           value={holding.categoryId}
           onChange={(e) => moveCategory.mutate(e.target.value)}
+          disabled={categoriesFailed}
+          title={categoriesFailed ? "Couldn't load categories" : undefined}
         >
           {(categories ?? []).map((c) => (
             <option key={c.id} value={c.id}>

@@ -27,6 +27,7 @@ function RecordPurchaseRow({
   const [instrument, setInstrument] = useState<InstrumentResponse | null>(null)
   const [units, setUnits] = useState('')
   const [open, setOpen] = useState(false)
+  const [rowError, setRowError] = useState<string | null>(null)
 
   const record = useMutation({
     mutationFn: () => recordPurchase(planId, item.id, instrument!.id, Number(units)),
@@ -36,17 +37,29 @@ function RecordPurchaseRow({
       setInstrument(null)
       setUnits('')
       setQuery('')
+      setRowError(null)
     },
+    onError: (err) =>
+      setRowError(err instanceof ApiError ? err.message : 'Could not record this purchase'),
   })
 
   const complete = useMutation({
     mutationFn: () => completeCategory(planId, item.id),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['plan', planId] }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['plan', planId] })
+      setRowError(null)
+    },
+    onError: (err) =>
+      setRowError(err instanceof ApiError ? err.message : 'Could not mark this category complete'),
   })
 
   async function onSearch(value: string) {
     setQuery(value)
-    setResults(value.trim() ? await searchInstruments(value) : [])
+    try {
+      setResults(value.trim() ? await searchInstruments(value) : [])
+    } catch (err) {
+      setRowError(err instanceof ApiError ? err.message : 'Search failed')
+    }
   }
 
   return (
@@ -55,6 +68,8 @@ function RecordPurchaseRow({
         <span className="text-sm font-medium text-slate-900">{item.categoryName}</span>
         <span className="text-sm font-semibold text-brand-700">{formatInr(item.recommendedAmount)}</span>
       </div>
+
+      {rowError && <div className="text-xs text-red-600">{rowError}</div>}
 
       {item.completed ? (
         <div className="text-xs font-medium text-emerald-600">Marked complete</div>

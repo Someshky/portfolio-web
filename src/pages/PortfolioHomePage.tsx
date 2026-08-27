@@ -1,4 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { getPortfolioHome, refreshPrices } from '../api/portfolio'
 import { ApiError } from '../api/types'
@@ -12,10 +13,20 @@ export function PortfolioHomePage() {
     queryKey: ['portfolio'],
     queryFn: getPortfolioHome,
   })
+  const [refreshMessage, setRefreshMessage] = useState<string | null>(null)
 
   const refresh = useMutation({
     mutationFn: refreshPrices,
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['portfolio'] }),
+    onSuccess: (result) => {
+      queryClient.invalidateQueries({ queryKey: ['portfolio'] })
+      setRefreshMessage(
+        result.failed > 0
+          ? `Updated ${result.updated}, but ${result.failed} couldn't be priced right now.`
+          : `Updated ${result.updated} price(s).`,
+      )
+    },
+    onError: (err) =>
+      setRefreshMessage(err instanceof ApiError ? err.message : "Couldn't refresh prices"),
   })
 
   if (isLoading) return <Spinner />
@@ -39,6 +50,11 @@ export function PortfolioHomePage() {
 
   return (
     <Page title="Your portfolio">
+      {refreshMessage && (
+        <div className="mb-4 rounded-lg bg-slate-100 px-3 py-2 text-sm text-slate-600">
+          {refreshMessage}
+        </div>
+      )}
       <Card className="mb-4">
         <div className="text-sm text-slate-500">Total value</div>
         <div className="text-2xl font-semibold text-slate-900">{formatInr(data.portfolioValueInr)}</div>

@@ -9,7 +9,7 @@ import { auth, signOut } from '../firebase'
 /** Screen 9 — Settings. */
 export function SettingsPage() {
   const navigate = useNavigate()
-  const { data: me } = useQuery({ queryKey: ['me'], queryFn: getMe })
+  const { data: me, isError: meFailed } = useQuery({ queryKey: ['me'], queryFn: getMe })
   const [confirmingDelete, setConfirmingDelete] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -50,7 +50,9 @@ export function SettingsPage() {
 
       <Card className="mt-6">
         <div className="text-xs text-slate-400">Signed in as</div>
-        <div className="text-sm font-medium text-slate-900">{me?.email ?? '—'}</div>
+        <div className="text-sm font-medium text-slate-900">
+          {meFailed ? <span className="text-red-600">Couldn't load</span> : (me?.email ?? '—')}
+        </div>
         <Button variant="secondary" className="mt-3" onClick={() => signOut().then(() => navigate('/login'))}>
           Sign out
         </Button>
